@@ -20,3 +20,12 @@ handle_call({new, Who}, _From, Tab) ->
 		[_]	-> {}
 	end,
 	{reply, Reply, Tab};
+handle_call({add, Who, X}, _From, Tab) ->
+	Reply = case ets:lookup(Tab, Who) of
+		[]					-> not_a_customer;
+		[{Who, Balance}] 	->
+			NewBalance = Balance + X,
+			ets:insert(Tab, {Who, NewBalance}),
+			{thanks, Who, your_balance_is, NewBalance}
+	end,
+	{reply, Reply, Tab};
