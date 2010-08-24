@@ -1,2 +1,7 @@
 -record(event_descriptor,
-	{ hostname, time})
+	{hostname, 
+    date_time_stamp = now(), 
+    priority  = low, 
+    severity  = low,
+    type = informational,
+    message}).
