@@ -14,5 +14,11 @@ init([]) ->
 		    	permanent, 
 				10000, 
 				worker, 
-				dynamic}
+				dynamic},
+		 {communication_server,
+			{communication_server, start, []},
+				 permanent, 
+				 10000, 
+				 worker, 
+				 [communication_server]}
 		]}}.
