@@ -18,8 +18,8 @@ all: compile
 
 compile: ${MODS:%=%.beam}
 
-client_node:
-	${ERL} -pa . -s client_node_engine start
+start_sasl:
+	${ERL} -boot start_sasl
 
 clean:
 	rm -rf *.beam erl_crash.dump
