@@ -6,26 +6,25 @@
 start() -> gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 stop() 	-> gen_server:call(?MODULE, stop).
 
-register(CncHost)	-> gen_server:call(?MODULE, {register, CncHost}).
-call(Packet)		-> gen_server:call(?MODULE, {call, Packet}).
+register(CncHost)	-> gen_server:cast(?MODULE, {register, CncHost}).
+call(Packet)		-> gen_server:cast(?MODULE, {call, Packet}).
 
 init([]) ->
 	io:format("*** init on CNC *** ~p~n", [?MODULE]),
 	{ok, 0}.
 
-handle_call({register, CncHost}, _From, N) ->
-	io:format("*** registering with CNC *** ~p~n", [?MODULE]),
-	Reply = CncHost,
-	{reply, Reply, N + 1};
-handle_call({call, Packet}, _From, N) ->
-	io:format("*** call from CNC *** ~p~n", [?MODULE]),
-	Reply = Packet,
-	{reply, Reply, N + 1};
 handle_call(stop, _From, N) ->
 	io:format("*** stopping *** ~p~n", [?MODULE]),
 	{stop, normal, stopped, N + 1}.
 
-handle_cast(_Msg, State) -> {noreply, State}.
+handle_cast({register, CncHost}, N) ->
+	io:format("*** registering with CNC *** ~p~n", [CncHost]),
+	{noreply, N + 1};
+handle_cast({call, Packet}, N) ->
+	io:format("*** call from CNC *** ~p~n", [Packet]),
+	{noreply, N + 1}.
+
+
 handle_info(_Info, State) -> {noreply, State}.
 terminate(_Reason, _State) -> ok.
 code_change(_OldVsn, State, Extra) -> {ok, State, Extra}.

@@ -1,9 +1,13 @@
 -module(client_node_supervisor).
 -behaviour(supervisor).
--export([start_link/1, init/1]).
+-export([start_link/1, init/1, stop_supervised/0]).
 		
 start_link(Args) ->
 	supervisor:start_link({local, ?MODULE}, ?MODULE, Args).
+	
+stop_supervised() ->
+	gen_event:stop(event_manager),
+	communication_server:stop().
 	
 init([]) ->
 	io:format("*** init(.) on supervisor *** ~p~n", [?MODULE]),
